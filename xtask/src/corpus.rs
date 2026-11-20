@@ -937,7 +937,7 @@ mod tests {
         assert!(output.contains("SDF V2000 byte/ordered-field/per-record RDKit checks: 0"));
         assert!(output.contains("SMILES source/notation/literal/RDKit checks: 8"));
         assert!(output.contains("formula source files: 0 matched RDKit, 8 unavailable"));
-        assert!(output.contains("formula record checks: 0 matched RDKit, 8 unavailable"));
+        assert!(output.contains("formula record checks: 8 matched RDKit, 0 unavailable"));
         Ok(())
     }
 
@@ -1536,6 +1536,9 @@ mod tests {
             "bondline-ordered-fields-v2000.sdf isolated MOL block 2: Bondline C2H6 matched RDKit",
             "bondline-ordered-fields-v2000.sdf open SDF record 1: Bondline C2H6 matched RDKit (2 drawn atoms)",
             "bondline-ordered-fields-v2000.sdf open SDF record 2: Bondline C2H6 matched RDKit (2 drawn atoms)",
+            "bondline-original-isotopic-chain.smi open SMILES record 1: Bondline C[13C]H6O matched RDKit (3 drawn atoms)",
+            "bondline-original-two-ring-labels.smi open SMILES record 1: Bondline C7H14 matched RDKit (7 drawn atoms)",
+            "bondline-original-salt-branch.smi open SMILES record 1: Bondline C4H9NaO matched RDKit (6 drawn atoms)",
             "bondline-original-isotopic-chain.smi SMILES record 1: import refused",
             "RDKit reference C[13C]H6O",
             "bondline-original-two-ring-labels.smi SMILES record 1: unsupported_source; RDKit reference C7H14",
@@ -1544,7 +1547,7 @@ mod tests {
             assert_eq!(output.matches(expected).count(), 1, "{expected}");
         }
         assert!(output.contains("formula source files: 2 matched RDKit, 5 unavailable"));
-        assert!(output.contains("formula record checks: 2 matched RDKit, 3 unavailable"));
+        assert!(output.contains("formula record checks: 5 matched RDKit, 0 unavailable"));
         Ok(())
     }
 

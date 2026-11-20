@@ -236,12 +236,41 @@ impl Coverage {
                 )?;
             }
         } else {
-            let raw = app.content().smiles_file()?;
-            if refs.len() != raw.records().len() {
+            if refs.len() != app.content().smiles_file()?.records().len() {
                 return Err("SMILES record count differs from RDKit notation scan".into());
             }
-            for (record, reference) in raw.records().iter().zip(&refs) {
-                let id = record.id().get();
+            let mut imports = Counts::default();
+            for (index, reference) in refs.iter().enumerate() {
+                let id = std::num::NonZeroU32::try_from(u32::try_from(index + 1)?)?;
+                let mut query = app.analysis_properties_request(false);
+                query.smiles_record_id = Some(id);
+                let report = app
+                    .execute(Command::AnalysisProperties(query))?
+                    .analysis
+                    .ok_or("missing SMILES record analysis")?;
+                if !matches!(report.scope, AnalysisScope::SmilesRecord)
+                    || report.record_id != Some(id)
+                {
+                    return Err(format!(
+                        "{name}: analysis returned a different SMILES record scope"
+                    )
+                    .into());
+                }
+                let direct = compare(report.outcome, reference)?;
+                // The three SMILES inputs reviewed by smiles::check each have a
+                // determinate nonaromatic composition without a drawing layout.
+                if matches!(direct, Comparison::Unavailable(_)) {
+                    return Err(
+                        format!("{name}: no direct formula for pinned SMILES record {id}").into(),
+                    );
+                }
+                self.records.record(
+                    &format!("{name} open SMILES record {id}"),
+                    reference,
+                    direct,
+                    output,
+                )?;
+
                 let mut drawing = open(path, bytes, file.format)?;
                 let params = json!({"expected_revision":drawing.state().revision,"selection":{"mode":"record","record_id":id},
                     "bond_length_pt":48,"origin_x_pt":72,"origin_y_pt":72,"page_width_pt":595,"page_height_pt":842});
@@ -252,7 +281,7 @@ impl Coverage {
                     }
                     Err(error) => return Err(error.into()),
                 };
-                self.records.record(
+                imports.record(
                     &format!("{name} SMILES record {id}"),
                     reference,
                     result,

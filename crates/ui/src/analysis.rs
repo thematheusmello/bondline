@@ -35,18 +35,26 @@ impl AnalysisWindow {
             ))
             .default_width(298.0)
             .show(ctx, |ui| {
-                let record_count = engine
-                    .content()
-                    .sdf()
-                    .ok()
-                    .and_then(|source| u32::try_from(source.records().len()).ok())
-                    .unwrap_or(0);
                 let mut request = engine.analysis_properties_request(true);
-                if record_count > 0 {
-                    if choose_record(ui, &mut self.record_number, record_count) {
+                let collection = match engine.content() {
+                    bondline_commands::StoredContent::SmilesFile(file) => Some((
+                        "SMILES",
+                        file.records().len(),
+                        &mut request.smiles_record_id,
+                    )),
+                    bondline_commands::StoredContent::Sdf { current, .. } => {
+                        Some(("SDF", current.records().len(), &mut request.sdf_record_id))
+                    }
+                    bondline_commands::StoredContent::Drawing(_) => None,
+                };
+                if let Some((label, records, selector)) = collection
+                    && let Ok(count) = u32::try_from(records)
+                    && count > 0
+                {
+                    if choose_record(ui, &mut self.record_number, count, label) {
                         self.cached = None;
                     }
-                    request.sdf_record_id = std::num::NonZeroU32::new(self.record_number);
+                    *selector = std::num::NonZeroU32::new(self.record_number);
                 }
                 let epoch = request.expected_selection_epoch;
                 if self
@@ -84,12 +92,17 @@ impl AnalysisWindow {
     }
 }
 
-fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
+fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32, format: &str) -> bool {
     *number = (*number).clamp(1, count);
     let previous = *number;
     if count > 1 {
         ui.horizontal(|ui| {
-            let label = ui.label("Record number");
+            // The raw SMILES inspector has its own independent record selector.
+            let label = ui.label(if format == "SMILES" {
+                "Analysis record number"
+            } else {
+                "Record number"
+            });
             ui.add(egui::DragValue::new(number).range(1..=count).speed(1.0))
                 .labelled_by(label.id);
         });
@@ -109,7 +122,7 @@ fn choose_record(ui: &mut egui::Ui, number: &mut u32, count: u32) -> bool {
             }
         });
     }
-    ui.label(format!("SDF record {number} of {count}"));
+    ui.label(format!("{format} record {number} of {count}"));
     *number != previous
 }
 
@@ -121,7 +134,7 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, engine: &Engine) {
         AnalysisScope::Selection => {
             ui.weak("Current selection");
         }
-        AnalysisScope::SdfRecord => {}
+        AnalysisScope::SdfRecord | AnalysisScope::SmilesRecord => {}
     };
     match &report.outcome {
         AnalysisOutcome::Available {
@@ -176,6 +189,9 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, engine: &Engine) {
                 let source = match engine.content().source_info().map(|s| s.format) {
                     Some("mol") => "MOL",
                     Some("sdf") if matches!(report.scope, AnalysisScope::SdfRecord) => "MOL",
+                    Some("smiles") if matches!(report.scope, AnalysisScope::SmilesRecord) => {
+                        "SMILES"
+                    }
                     Some("cdxml") => "CDXML",
                     Some("cdx") => "CDX",
                     _ => "source",

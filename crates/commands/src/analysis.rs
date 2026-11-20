@@ -27,6 +27,27 @@ pub struct AnalysisProperties {
     pub include_elemental_analysis: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub sdf_record_id: Option<std::num::NonZeroU32>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub smiles_record_id: Option<std::num::NonZeroU32>,
+}
+
+#[derive(Clone, Copy)]
+pub(super) enum Record {
+    Sdf(std::num::NonZeroU32),
+    Smiles(std::num::NonZeroU32),
+}
+
+impl AnalysisProperties {
+    pub(super) fn record(&self) -> Result<Option<Record>, Error> {
+        match (self.sdf_record_id, self.smiles_record_id) {
+            (Some(id), None) => Ok(Some(Record::Sdf(id))),
+            (None, Some(id)) => Ok(Some(Record::Smiles(id))),
+            (None, None) => Ok(None),
+            (Some(_), Some(_)) => Err(Error::InvalidParams(
+                <serde_json::Error as serde::de::Error>::custom("choose one record source"),
+            )),
+        }
+    }
 }
 
 pub(super) enum Fields {
@@ -55,6 +76,7 @@ pub enum AnalysisScope {
     Document,
     Selection,
     SdfRecord,
+    SmilesRecord,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -144,6 +166,7 @@ impl Engine {
             expected_selection_epoch: self.selection().epoch,
             include_elemental_analysis,
             sdf_record_id: None,
+            smiles_record_id: None,
         }
     }
 
@@ -156,10 +179,10 @@ impl Engine {
         revision: u64,
         epoch: u64,
         fields: Fields,
-        record_id: Option<std::num::NonZeroU32>,
+        record: Option<Record>,
     ) -> Result<Prepared, Error> {
         Ok(Prepared::immediate(CommandResult {
-            analysis: Some(self.analysis_report(revision, epoch, fields, record_id)?),
+            analysis: Some(self.analysis_report(revision, epoch, fields, record)?),
             ..self.state()
         }))
     }
@@ -169,7 +192,7 @@ impl Engine {
         revision: u64,
         epoch: u64,
         fields: Fields,
-        record_id: Option<std::num::NonZeroU32>,
+        record: Option<Record>,
     ) -> Result<AnalysisReport, Error> {
         if revision != self.revision {
             return Err(Error::StaleRevision);
@@ -180,20 +203,52 @@ impl Engine {
             return Err(Error::StaleSelection);
         }
         let selection = self.selection();
-        let scope = if record_id.is_some() {
-            AnalysisScope::SdfRecord
-        } else if selection.atom_ids.is_empty() {
-            AnalysisScope::Document
-        } else {
-            AnalysisScope::Selection
+        let (scope, record_id) = match record {
+            Some(Record::Sdf(id)) => (AnalysisScope::SdfRecord, Some(id)),
+            Some(Record::Smiles(id)) => (AnalysisScope::SmilesRecord, Some(id)),
+            None if selection.atom_ids.is_empty() => (AnalysisScope::Document, None),
+            None => (AnalysisScope::Selection, None),
         };
         let report = |outcome| AnalysisReport {
             scope,
             record_id,
             outcome,
         };
+        if let Some(Record::Smiles(id)) = record {
+            let file = match self.content() {
+                crate::StoredContent::SmilesFile(file) => file,
+                crate::StoredContent::Drawing(_) => {
+                    return Err(Error::WrongContent {
+                        required: "smiles",
+                        actual: "drawing",
+                    });
+                }
+                crate::StoredContent::Sdf { .. } => {
+                    return Err(Error::WrongContent {
+                        required: "smiles",
+                        actual: "sdf",
+                    });
+                }
+            };
+            let raw = file.read_record(id.into())?;
+            if raw.atoms().len() > MAX_ANALYSIS_ITEMS {
+                return Ok(report(AnalysisOutcome::LimitExceeded {
+                    limit: MAX_ANALYSIS_ITEMS,
+                }));
+            }
+            let Some(molecule) = raw.record_composition(&Default::default())? else {
+                return Ok(report(AnalysisOutcome::UnsupportedSource));
+            };
+            return Ok(report(fields.outcome(
+                molecule.composition,
+                molecule.atom_count,
+                molecule.component_count,
+                false,
+                std::num::NonZeroUsize::new(molecule.defaulted_hydrogen_atoms),
+            )?));
+        }
         let molecule;
-        let stored = if let Some(record_id) = record_id {
+        let stored = if let Some(Record::Sdf(record_id)) = record {
             let sdf = self.content().sdf()?;
             let id = bondline_io::sdf::RecordId::new(record_id.get())
                 .ok_or(bondline_io::sdf::SdfError::InvalidSpan)?;
@@ -280,7 +335,26 @@ impl Engine {
             }
             Err(error) => return Err(Error::Composition(error)),
         };
-        let (masses, elemental_analysis) = match fields {
+        Ok(report(fields.outcome(
+            composition,
+            atom_count,
+            fragment_count,
+            partial_fragments,
+            defaulted_hydrogen_atoms,
+        )?))
+    }
+}
+
+impl Fields {
+    fn outcome(
+        self,
+        composition: Composition,
+        atom_count: usize,
+        fragment_count: usize,
+        partial_fragments: bool,
+        defaulted_hydrogen_atoms: Option<std::num::NonZeroUsize>,
+    ) -> Result<AnalysisOutcome, Error> {
+        let (masses, elemental_analysis) = match self {
             Fields::Formula => (None, None),
             Fields::Masses => (Some(composition.molecular_masses().into()), None),
             Fields::ElementalAnalysis => {
@@ -292,7 +366,7 @@ impl Engine {
                 (Some(masses.into()), Some(analysis))
             }
         };
-        Ok(report(AnalysisOutcome::Available {
+        Ok(AnalysisOutcome::Available {
             atom_count,
             fragment_count,
             partial_fragments,
@@ -300,7 +374,7 @@ impl Engine {
             formula: composition.hill_formula(FormulaIsotopes::Separate)?,
             masses,
             elemental_analysis,
-        }))
+        })
     }
 }
 

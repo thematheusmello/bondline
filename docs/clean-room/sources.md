@@ -2464,6 +2464,8 @@ Coordinate-free neutral carbon CDXML analysis applies the public elemental-node 
 
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
 
+SMILES record analysis applies OpenSMILES 1.0 normal valences to bare nonaromatic organic-subset atoms. Bracket H, numbered isotope, formal charge, dots and actual connected components retain their distinct meanings. [Source contract, pinned specification and external-reader differences](../research/smiles-record-analysis.md).
+
 ### Analysis of individual SDF molecules
 
 An SDfile holds separate structure records with optional data fields. A record’s

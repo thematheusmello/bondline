@@ -2,7 +2,12 @@
 
 use bondline_io::smiles::{BondOrder, Hydrogens, SmilesDocument};
 use libfuzzer_sys::fuzz_target;
-use std::{collections::BTreeSet, num::NonZeroU16, ops::Range, sync::Arc};
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    num::NonZeroU16,
+    ops::Range,
+    sync::Arc,
+};
 
 fn span<'a>(data: &'a [u8], range: &Range<usize>, outer: &Range<usize>) -> &'a [u8] {
     assert!(outer.start <= range.start && range.start < range.end && range.end <= outer.end);
@@ -27,6 +32,98 @@ fn label(data: &[u8]) -> u8 {
         .expect("ASCII ring label")
         .parse()
         .expect("ring label is in 0..99")
+}
+
+// Compare complete raw-record accounting with a vertex walk, independent of
+// the production disjoint-set and of layout's narrower normalization policy.
+fn record_composition(document: &SmilesDocument) {
+    let report = document
+        .record_composition(&Default::default())
+        .expect("bounded record accounting");
+    let atoms = document.atoms();
+    let unresolved = atoms.iter().any(|a| a.aromatic || a.isotope == Some(0))
+        || document
+            .bonds()
+            .iter()
+            .any(|b| b.order == BondOrder::Aromatic);
+    assert_eq!(report.is_none(), unresolved);
+    let Some(report) = report else { return };
+    let mut neighbors = vec![Vec::new(); atoms.len()];
+    for bond in document.bonds() {
+        let [a, b] = bond.atoms;
+        let order: u16 = match bond.order {
+            BondOrder::Single => 1,
+            BondOrder::Double => 2,
+            BondOrder::Triple => 3,
+            BondOrder::Aromatic => panic!("aromatic record was reported"),
+        };
+        neighbors[a].push((b, order));
+        neighbors[b].push((a, order));
+    }
+    let mut visited = vec![false; atoms.len()];
+    let mut components = 0;
+    let mut counts = BTreeMap::new();
+    let mut defaults = 0;
+    for (i, atom) in atoms.iter().enumerate() {
+        if !visited[i] {
+            components += 1;
+            let mut pending = vec![i];
+            visited[i] = true;
+            while let Some(v) = pending.pop() {
+                for &(n, _) in &neighbors[v] {
+                    if !visited[n] {
+                        visited[n] = true;
+                        pending.push(n);
+                    }
+                }
+            }
+        }
+        *counts
+            .entry((atom.element.get(), atom.isotope))
+            .or_insert(0_u64) += 1;
+        let hydrogens = match atom.hydrogens {
+            Hydrogens::Bracket(n) => u16::from(n),
+            Hydrogens::Implicit => {
+                defaults += 1;
+                let valences: &[u16] = match atom.element.get() {
+                    5 => &[3],
+                    6 => &[4],
+                    7 | 15 => &[3, 5],
+                    8 => &[2],
+                    16 => &[2, 4, 6],
+                    9 | 17 | 35 | 53 => &[1],
+                    _ => panic!("element outside the bare organic subset"),
+                };
+                let bonds = neighbors[i].iter().map(|(_, order)| *order).sum::<u16>();
+                valences
+                    .iter()
+                    .find_map(|v| v.checked_sub(bonds))
+                    .unwrap_or(0)
+            }
+        };
+        if hydrogens > 0 {
+            *counts.entry((1, None)).or_default() += u64::from(hydrogens);
+        }
+    }
+    let actual: BTreeMap<_, _> = report
+        .composition
+        .isotope_counts()
+        .iter()
+        .map(|n| ((n.element.get(), n.isotope.map(NonZeroU16::get)), n.count))
+        .collect();
+    assert_eq!(actual, counts);
+    assert_eq!(
+        report.composition.total_charge(),
+        atoms.iter().map(|a| i64::from(a.charge)).sum::<i64>()
+    );
+    assert_eq!(
+        (
+            report.atom_count,
+            report.component_count,
+            report.defaulted_hydrogen_atoms
+        ),
+        (atoms.len(), components, defaults)
+    );
 }
 
 // Unique authored isotope markers recover every output endpoint independently of DFS order.
@@ -334,6 +431,7 @@ fuzz_target!(|data: &[u8]| {
             }
         }
     }
+    record_composition(&document);
     normalized_export(&document);
     assert_eq!(source.as_ref(), data);
 });

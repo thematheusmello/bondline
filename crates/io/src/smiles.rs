@@ -7,6 +7,7 @@ use bondline_model::Element;
 use std::{collections::HashSet, ops::Range, sync::Arc};
 
 mod acyclic;
+mod analysis;
 mod authoring;
 mod authoring_layout;
 mod components;
@@ -16,6 +17,7 @@ mod normalize;
 pub(crate) mod projection;
 mod ring;
 pub(crate) mod write;
+pub use analysis::RecordComposition;
 pub use authoring::AuthoringError;
 pub use authoring_layout::{
     validate_authoring_page, validate_authoring_page_with_settings,

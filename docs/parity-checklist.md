@@ -428,7 +428,7 @@ establish chemical preview, data-edit UI or other platforms.
 | MV-021 | View > Show Info Window | 111-112, 120 | missing | - |
 | MV-022 | View > Show Chemical Warnings | 127 | missing | - |
 | MV-023 | View > Show Reaction Interpretation | 198, 200 | missing | - |
-| MV-024 | View > Show Analysis Window | 222 | verified | Show/Hide, current whole/selection formula, molecular weight, exact mass, elemental percentages and explicit unavailable states. [Panel](verification-analysis-window.md), [mass receiving tests](verification-analysis-masses.md), [coordinate-free CDXML](verification-cdxml-carbon-analysis.md). |
+| MV-024 | View > Show Analysis Window | 222 | verified | Show/Hide, current whole/selection formula, molecular weight, exact mass, elemental percentages and explicit unavailable states. [Panel](verification-analysis-window.md), [mass receiving tests](verification-analysis-masses.md), [individual SMILES records](verification-smiles-record-analysis.md), [coordinate-free CDXML](verification-cdxml-carbon-analysis.md). |
 | MV-025 | View > Show Chemical Properties Window | 235 | missing | - |
 | MV-026 | View > Show Periodic Table Window | 54, 91 | missing | - |
 | MV-027 | View > Show Character Map Window | 94 | missing | - |
