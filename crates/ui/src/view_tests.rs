@@ -1658,3 +1658,31 @@ fn analysis_preserves_the_formula_when_an_element_has_no_natural_mass() -> TestR
     assert!(!seen(&restored, "CH3Tc"));
     Ok(())
 }
+
+#[test]
+fn analysis_shows_cdxml_values_without_an_atom_canvas() -> TestResult {
+    let mut f = Fixture::new(1160., 800., 1.)?;
+    let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../io/tests/fixtures/cdxml-carbon-analysis/butane.cdxml");
+    f.command("document.open_cdxml", json!({"path":path}))?;
+    f.choose("View")?;
+    f.choose("Show Analysis Window")?;
+    let before = f.state()?;
+    let frame = f.warm();
+    for value in [
+        "C4H10",
+        "58.124",
+        "58.078250 Da",
+        "The CDXML valence default supplies hydrogen counts for 3 atoms.",
+    ] {
+        assert!(
+            frame
+                .shapes
+                .iter()
+                .any(|shape| matches!(&shape.shape,egui::Shape::Text(t) if t.galley.text()==value)),
+            "{value}"
+        );
+    }
+    assert_eq!(f.state()?, before);
+    Ok(())
+}

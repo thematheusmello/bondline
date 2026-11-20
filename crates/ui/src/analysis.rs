@@ -42,13 +42,7 @@ impl AnalysisWindow {
                     return;
                 };
                 match report {
-                    Ok(report) => display(
-                        ui,
-                        report,
-                        engine
-                            .stored_document()
-                            .is_ok_and(|d| d.mol_version().is_some()),
-                    ),
+                    Ok(report) => display(ui, report, engine),
                     Err(message) => {
                         ui.label(message);
                     }
@@ -64,7 +58,7 @@ impl AnalysisWindow {
     }
 }
 
-fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
+fn display(ui: &mut egui::Ui, report: &AnalysisReport, engine: &Engine) {
     match report.scope {
         AnalysisScope::Document => ui.weak("Entire drawing"),
         AnalysisScope::Selection => ui.weak("Current selection"),
@@ -115,7 +109,12 @@ fn display(ui: &mut egui::Ui, report: &AnalysisReport, mol: bool) {
             ));
             if let Some(count) = defaulted_hydrogen_atoms {
                 let unit = if count.get() == 1 { "atom" } else { "atoms" };
-                let source = if mol { "MOL" } else { "CDX" };
+                let source = match engine.content().source_info().map(|s| s.format) {
+                    Some("mol") => "MOL",
+                    Some("cdxml") => "CDXML",
+                    Some("cdx") => "CDX",
+                    _ => "source",
+                };
                 ui.label(format!(
                     "The {source} valence default supplies hydrogen counts for {count} {unit}."
                 ));
