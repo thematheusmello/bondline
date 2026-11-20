@@ -33,3 +33,19 @@ cargo run -p bondline-cli -- run \
   --cmd '{"command":"document.open_cdx","params":{"path":"crates/io/tests/fixtures/cdx-mixed-skeleton/ethanol.cdx"}}' \
   --cmd '{"command":"analysis.properties","params":{"expected_revision":1,"expected_selection_epoch":0,"include_elemental_analysis":true}}'
 ```
+
+## V2000 and V3000 MOL
+
+The combined source-aware hydrogen workflow also passes elemental analysis for six
+independently generated CTfiles. Each format covers ethanol, isotope-labelled ethanol
+and ammonium. A separate RDKit full graph supplies atoms and attached H. Tests compare
+every element identity, weight and percentage for the complete structures and both
+ethanol selections, then save each exact source to a Unicode path and repeat on reopen.
+Before the source-aware MOL increment the same V2000 ethanol received
+`unresolved_hydrogens` on atom 1. The combined test is
+`cargo test -p bondline-cli --test elemental_mol`.
+
+The isolated macOS app also opened both ethanol MOL editions, selected their CH₃O
+end, saved and reopened exact copies and displayed the whole and partial tables through
+its own accessibility tree. The integrated receipt SHA-256 is
+`85bf0521879d1674906a93e4fb5172c2667018a4d3a9ebfea6a6d1e14174ce73`.
