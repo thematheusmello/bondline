@@ -2486,6 +2486,10 @@ background host verified the values through its own accessibility tree and
 closed. The native licenses and four-target dependency delta passed.
 [Acceptance and replay](docs/verification-analysis-masses.md).
 
-Scoped tests finished and the PR awaits its combined workspace gate and main
-integration. Adjustable decimals, isotope distribution, elemental percentages,
-overrides and live captions remain open. Actions stays off and M0–M5 remains active.
+The complete local gate passed on `523e0c4` with main/#28 in its ancestry:
+workspace 2,403 passed, zero failed, one ignored; the separate AccessKit suite
+passed all three tests. Formatting, both Clippy checks, layering, licenses,
+assets and corpus checks passed. Mixed CDX now also supplies a checked CH₃O
+selection with one defaulted carbon. Adjustable decimals, isotope distribution,
+elemental percentages, overrides and live captions remain open. Actions stays
+off and M0–M5 remains active.
