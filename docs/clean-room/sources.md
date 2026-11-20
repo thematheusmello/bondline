@@ -2459,3 +2459,12 @@ borane. [BIOVIA representation guide](https://manualzz.com/doc/44003874/biovia-c
 - Molecular weight, monoisotopic exact mass, nuclide completeness and ion conventions follow the [source register and numerical contract](../research/molecular-masses.md). It links the public v25 guide pp. 221–224, IUPAC definitions, CIAAW tables, NIST/CODATA and the MIT atomic-data revision.
 
 - Elemental analysis uses each element’s percentage of the molecular weight in the current scope. [Revvity Signals v25 guide, printed p. 221](https://chemistry.beloit.edu/classes/programs/ChemDraw_25_manual.pdf), [IUPAC mass fraction](https://goldbook.iupac.org/terms/view/M03722), [Bondline’s numeric and presentation conventions](../research/elemental-analysis.md).
+
+### Darwin loopback listener lifetime, 2026-11-20
+
+The macOS 27.2 public SDK `sys/fcntl.h` and `fcntl(2)` manual define
+`FD_CLOFORK`. Published XNU spawn and descriptor-table sources describe
+the separate fork and exec stages. The experimental comparison uses the
+installed kernel and the real listener. The compatibility evidence identifies
+the older kernels and exact limits of the observed release guarantee.
+[Apple XNU fork and exec](https://github.com/apple-oss-distributions/xnu/blob/f6217f891ac0bb64f3d375211650a4c1ff8ca1ea/bsd/kern/kern_exec.c) · [Source decision and receiving evidence](../research/macos-listener-lifetime.md)
